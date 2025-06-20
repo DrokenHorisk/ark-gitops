@@ -1,22 +1,21 @@
 FROM scottyhardy/docker-wine:latest
 
-LABEL maintainer="droken"
+# Installer SteamCMD
+RUN apt-get update && \
+    apt-get install -y wget ca-certificates lib32gcc-s1 unzip curl && \
+    mkdir -p /steamcmd && \
+    cd /steamcmd && \
+    wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz && \
+    tar -xvzf steamcmd_linux.tar.gz && \
+    rm steamcmd_linux.tar.gz
 
-USER root
-
-# Installer SteamCMD et dépendances utiles
-RUN apt-get update && apt-get install -y \
-    wget \
-    unzip \
-    curl \
-    xvfb \
-    winbind
-
-# Créer dossier serveur
+# Créer répertoire du jeu dans le conteneur
 RUN mkdir -p /usr/games/ark
 
-# Copie du script d'entrée
-COPY entrypoint.sh /entrypoint.sh
-RUN chmod +x /entrypoint.sh
+# Copie du script de lancement
+COPY start.sh /start.sh
+RUN chmod +x /start.sh
 
-ENTRYPOINT ["/entrypoint.sh"]
+WORKDIR /usr/games/ark
+
+CMD ["/start.sh"]
