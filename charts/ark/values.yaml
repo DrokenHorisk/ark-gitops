@@ -15,7 +15,6 @@ service:
   port: 7777
   queryPort: 27015
   rconPort: 27020
-
   nodePorts:
     port: 50001        # jeu
     queryPort: 50002   # query
