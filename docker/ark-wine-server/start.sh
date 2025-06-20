@@ -1,14 +1,20 @@
 #!/bin/bash
-echo ">> Mise à jour du serveur ASA..."
 
-chmod +x /steamcmd/steamcmd.sh
+echo ">> Début du script start.sh"
+echo "UID=$(id -u), GID=$(id -g), whoami=$(whoami)"
+
+echo ">> Contenu du dossier /steamcmd :"
+ls -l /steamcmd
+
+echo ">> Exécution de SteamCMD pour mettre à jour ASA"
 /steamcmd/steamcmd.sh +force_install_dir /usr/games/ark +login anonymous +app_update 2430930 validate +quit
 
-echo ">> Lancement du serveur ASA..."
-cd /usr/games/ark
+echo ">> Contenu du dossier /usr/games/ark après install :"
+ls -l /usr/games/ark
 
-# Empêche Wine de tenter de créer une fenêtre
+echo ">> Lancement du serveur ASA..."
 export DISPLAY=:99
 Xvfb :99 -screen 0 1024x768x16 &
+sleep 2
 
-wine ASA.exe -ServerMap=${MAP_NAME:-TheIsland} -log
+wine /usr/games/ark/ASA.exe -log

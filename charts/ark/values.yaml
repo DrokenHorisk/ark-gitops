@@ -36,3 +36,12 @@ env:
 # Désactivation des probes pour éviter restart en boucle
 livenessProbe: null
 readinessProbe: null
+
+volumeMounts:
+  - name: ark-data
+    mountPath: /usr/games/ark
+
+volumes:
+  - name: ark-data
+    persistentVolumeClaim:
+      claimName: ark-pvc
