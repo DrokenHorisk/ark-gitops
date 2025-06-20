@@ -20,11 +20,11 @@ spec:
           command: ["/bin/bash", "-c"]
           args:
             - |
-              Xvfb :0 &  # Lancer Xvfb pour simuler DISPLAY
+              Xvfb :0 &
               export DISPLAY=:0
               wineboot
-              cd /home/wineuser
-              wine /usr/games/ark/ASA.exe  # Adapter si le chemin est différent
+              wine /usr/games/ark/ASA.exe
+
           volumeMounts:
             - mountPath: /usr/games
               name: ark-data

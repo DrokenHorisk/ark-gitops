@@ -1,13 +1,8 @@
 image:
-  repository: acekorneya/asa_server
+  repository: droken/ark-wine-server
   tag: latest
   pullPolicy: IfNotPresent
 
-image:
-  repository: scottyhardy/docker-wine
-  tag: latest
-  pullPolicy: IfNotPresent
-  
 resources:
   requests:
     cpu: "2"
