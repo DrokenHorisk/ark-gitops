@@ -26,6 +26,6 @@ persistence:
 
 env:
   SERVER_NAME: "ARK NAS"
-  MAP_NAME: "TheIsland"
+  MAP_NAME: "Astraeos"
   MAX_PLAYERS: "10"
   ADMIN_PASSWORD: "changeme"
