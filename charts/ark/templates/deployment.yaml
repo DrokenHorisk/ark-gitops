@@ -20,16 +20,20 @@ spec:
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
             - containerPort: 7777
+              protocol: UDP
             - containerPort: 27015
+              protocol: UDP
             - containerPort: 27020
+              protocol: TCP
 
-          securityContext:
-            privileged: true
-            runAsUser: 0
+          # securityContext:
+          #   privileged: true
+          #   runAsUser: 0
 
           volumeMounts:
             - mountPath: {{ .Values.persistence.mountPath }}
               name: ark-data
+
           env:
             - name: SERVER_NAME
               value: {{ .Values.env.SERVER_NAME | quote }}
@@ -39,6 +43,7 @@ spec:
               value: {{ .Values.env.MAX_PLAYERS | quote }}
             - name: ADMIN_PASSWORD
               value: {{ .Values.env.ADMIN_PASSWORD | quote }}
+
           livenessProbe:
             exec:
               command:
@@ -47,11 +52,13 @@ spec:
             initialDelaySeconds: 120
             periodSeconds: 30
 
-          readinessProbe:
-            tcpSocket:
-              port: 27020
-            initialDelaySeconds: 60
-            periodSeconds: 15
+          # ❌ Readiness probe désactivée temporairement
+          # readinessProbe:
+          #   tcpSocket:
+          #     port: 27020
+          #   initialDelaySeconds: 60
+          #   periodSeconds: 15
+
       volumes:
         - name: ark-data
           hostPath:
