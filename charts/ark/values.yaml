@@ -1,0 +1,31 @@
+image:
+  repository: acekorneya/asa_server
+  tag: latest
+  pullPolicy: IfNotPresent
+
+resources:
+  requests:
+    cpu: "2"
+    memory: "4Gi"
+  limits:
+    cpu: "4"
+    memory: "8Gi"
+
+service:
+  type: NodePort
+  port: 7777
+  rconPort: 27020
+  queryPort: 27015
+
+persistence:
+  enabled: true
+  storageClass: ""
+  size: 20Gi
+  mountPath: /arkserver/ShooterGame/Saved
+  hostPath: /mnt/ark-backups
+
+env:
+  SERVER_NAME: "ARK NAS"
+  MAP_NAME: "TheIsland"
+  MAX_PLAYERS: "10"
+  ADMIN_PASSWORD: "changeme"
