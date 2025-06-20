@@ -7,9 +7,8 @@ resources:
   requests:
     cpu: "2"
     memory: "4Gi"
-  limits:
-    cpu: "4"
-    memory: "8Gi"
+  # Pas de limits pour éviter OOM kill (exit code 137)
+  limits: {}
 
 service:
   type: NodePort
@@ -26,6 +25,10 @@ persistence:
 
 env:
   SERVER_NAME: "ARK NAS"
-  MAP_NAME: "Astraeos"
+  MAP_NAME: "TheIsland"
   MAX_PLAYERS: "10"
   ADMIN_PASSWORD: "changeme"
+
+# Désactivation des probes pour éviter restart en boucle
+livenessProbe: null
+readinessProbe: null
