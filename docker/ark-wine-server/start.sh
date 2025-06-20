@@ -1,7 +1,6 @@
 #!/bin/bash
-set -e
-
 echo ">> Mise à jour du serveur ASA..."
+<<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
 /steamcmd/steamcmd.sh +login anonymous +force_install_dir /usr/games/ark +app_update 2430930 validate +quit
@@ -11,14 +10,12 @@ sudo /steamcmd/steamcmd.sh +login anonymous +force_install_dir /usr/games/ark +a
 =======
 /steamcmd/steamcmd.sh +login anonymous +force_install_dir /usr/games/ark +app_update 2430930 validate +quit
 >>>>>>> 61a254d (Ajout de sudo pour exécuter SteamCMD avec les permissions appropriées dans le script de lancement)
+=======
+>>>>>>> 38a6522 (Nettoyage du Dockerfile et mise à jour du script de lancement pour simplifier l'installation de SteamCMD et améliorer la gestion des erreurs.)
 
-# Vérification du binaire ASA
-if [ ! -f /usr/games/ark/ASA.exe ]; then
-    echo "❌ Fichier ASA.exe introuvable. SteamCMD a peut-être échoué."
-    ls -l /usr/games/ark
-    exit 1
-fi
+# Exécute steamcmd sans changer ses permissions
+/steamcmd/steamcmd.sh +force_install_dir /usr/games/ark +login anonymous +app_update 2430930 validate +quit
 
 echo ">> Lancement du serveur ASA..."
 cd /usr/games/ark
-wine ASA.exe
+wine ASA.exe -ServerMap=TheIsland -log
