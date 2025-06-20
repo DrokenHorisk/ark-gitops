@@ -1,5 +1,5 @@
 image:
-  repository: aceskorneya/asa_server
+  repository: juankysoriano/ark-survival-ascended-server
   tag: latest
   pullPolicy: IfNotPresent
 
