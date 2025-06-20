@@ -44,12 +44,13 @@ spec:
               command:
                 - pgrep
                 - ShooterGameServer
-            initialDelaySeconds: 60
+            initialDelaySeconds: 120
             periodSeconds: 30
+
           readinessProbe:
             tcpSocket:
-              port: 7777
-            initialDelaySeconds: 30
+              port: 27020
+            initialDelaySeconds: 60
             periodSeconds: 15
       volumes:
         - name: ark-data
