@@ -51,10 +51,6 @@ spec:
               port: 7777
             initialDelaySeconds: 30
             periodSeconds: 15
-      securityContext:
-        sysctls:
-          - name: vm.max_map_count
-            value: "262144"
       volumes:
         - name: ark-data
           hostPath:
