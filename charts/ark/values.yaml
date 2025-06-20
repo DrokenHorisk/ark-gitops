@@ -13,8 +13,14 @@ resources:
 service:
   type: NodePort
   port: 7777
-  rconPort: 27020
   queryPort: 27015
+  rconPort: 27020
+
+  nodePorts:
+    port: 50001        # jeu
+    queryPort: 50002   # query
+    rconPort: 50003    # RCON
+
 
 persistence:
   enabled: true
