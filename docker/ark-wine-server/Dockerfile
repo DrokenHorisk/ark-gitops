@@ -10,7 +10,9 @@ RUN mkdir -p /steamcmd && \
     cd /steamcmd && \
     wget https://steamcdn-a.akamaihd.net/client/installer/steamcmd_linux.tar.gz && \
     tar -xvzf steamcmd_linux.tar.gz && \
+    chmod +x /steamcmd/steamcmd.sh && \
     rm steamcmd_linux.tar.gz
+
 
 # Créer le dossier de jeu
 RUN mkdir -p /usr/games/ark
