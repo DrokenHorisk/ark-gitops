@@ -4,8 +4,8 @@ metadata:
   name: ark-config
   namespace: ark-server
 data:
-  SERVER_MAP: "TheIsland_WP"
-  SESSION_NAME: "MonServeurARK"
+  SERVER_MAP: "Astraeos_WP"
+  SESSION_NAME: "IceLauzDro"
   SERVER_PORT: "7777"
   SERVER_QUERY_PORT: "27015"
   RCON_PORT: "32330"
