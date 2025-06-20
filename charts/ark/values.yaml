@@ -21,7 +21,6 @@ service:
     queryPort: 50002   # query
     rconPort: 50003    # RCON
 
-
 persistence:
   enabled: true
   storageClass: ""
