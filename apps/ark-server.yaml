@@ -9,7 +9,7 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/<TON_USER>/<TON_REPO>.git
+    repoURL: https://github.com/DrokenHorisk/ark-gitops
     targetRevision: HEAD
     path: charts/ark
   syncPolicy:
