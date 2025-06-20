@@ -15,23 +15,18 @@ spec:
         app: ark
     spec:
       containers:
-        - name: ark
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          ports:
-            - containerPort: 7777
-              protocol: UDP
-            - containerPort: 27015
-              protocol: UDP
-            - containerPort: 27020
-              protocol: TCP
-
-          # securityContext:
-          #   privileged: true
-          #   runAsUser: 0
-
+        - name: wine
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+          command: ["/bin/bash", "-c"]
+          args:
+            - |
+              Xvfb :0 &  # Lancer Xvfb pour simuler DISPLAY
+              export DISPLAY=:0
+              wineboot
+              cd /home/wineuser
+              wine /usr/games/ark/ASA.exe  # Adapter si le chemin est différent
           volumeMounts:
-            - mountPath: {{ .Values.persistence.mountPath }}
+            - mountPath: /usr/games
               name: ark-data
 
           env:

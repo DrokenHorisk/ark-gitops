@@ -3,6 +3,11 @@ image:
   tag: latest
   pullPolicy: IfNotPresent
 
+image:
+  repository: scottyhardy/docker-wine
+  tag: latest
+  pullPolicy: IfNotPresent
+  
 resources:
   requests:
     cpu: "2"
