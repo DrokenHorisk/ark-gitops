@@ -2,6 +2,7 @@
 set -e
 
 echo ">> Mise à jour du serveur ASA..."
+RUN chmod +x /steamcmd/steamcmd.sh
 /steamcmd/steamcmd.sh +login anonymous +force_install_dir /usr/games/ark +app_update 2430930 validate +quit
 
 # Vérification du binaire ASA
