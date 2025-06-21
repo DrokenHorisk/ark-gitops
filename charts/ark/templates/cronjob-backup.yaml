@@ -1,0 +1,26 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: ark-backup
+spec:
+  schedule: "0 */6 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          restartPolicy: OnFailure
+          containers:
+            - name: backup
+              image: busybox
+              command:
+                - /bin/sh
+                - -c
+                - "tar czf /ark/backups/$(date +%F_%T).tar.gz -C /ark ."
+              volumeMounts:
+                - name: ark-data
+                  mountPath: /ark
+          volumes:
+            - name: ark-data
+              hostPath:
+                path: /mnt/ark_data
+                type: Directory

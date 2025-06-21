@@ -4,15 +4,21 @@ metadata:
   name: ark-server
   namespace: argocd
 spec:
-  destination:
-    namespace: ark-server
-    server: https://kubernetes.default.svc
   project: default
   source:
     repoURL: https://github.com/DrokenHorisk/ark-gitops.git
     targetRevision: HEAD
     path: charts/ark
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: ark-server
   syncPolicy:
     automated:
       prune: true
       selfHeal: true
+    retry:
+      limit: 5
+      backoff:
+        duration: 5s
+        factor: 2
+        maxDuration: 3m

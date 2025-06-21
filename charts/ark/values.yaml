@@ -1,0 +1,34 @@
+image:
+  repository: acekorneya/asa_server
+  tag: latest
+
+service:
+  type: LoadBalancer
+  ports:
+    game:
+      port: 50001
+      protocol: UDP
+    rcon:
+      port: 50003
+      protocol: TCP
+    query:
+      port: 50002
+      protocol: UDP
+
+persistence:
+  enabled: true
+  hostPath: "/mnt/ark_data"
+  size: 20Gi
+
+config:
+  steamcmd: /usr/games/.wine/drive_c/Steam
+  env:
+    PUID: "7777"
+    PGID: "7777"
+    BATTLEEYE: "FALSE"
+    RCON_ENABLED: "TRUE"
+    UPDATE_SERVER: "TRUE"
+    ASA_PORT: "50001"
+    RCON_PORT: "50002"
+    MAX_PLAYERS: "70"
+    CLUSTER_ID: "cluster"

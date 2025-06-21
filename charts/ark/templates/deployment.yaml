@@ -1,0 +1,65 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ark-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels: { app: ark }
+  template:
+    metadata:
+      labels: { app: ark }
+    spec:
+      containers:
+        - name: ark
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: {{ .Values.service.ports.game.port }} protocol: "{{ .Values.service.ports.game.protocol }}"
+            - containerPort: {{ .Values.service.ports.rcon.port }} protocol: "{{ .Values.service.ports.rcon.protocol }}"
+            - containerPort: {{ .Values.service.ports.query.port }} protocol: "{{ .Values.service.ports.query.protocol }}"
+          env:
+          {{- range $k,$v := .Values.config.env }}
+            - name: "{{ $k }}"
+              value: "{{ $v }}"
+          {{- end }}
+          volumeMounts:
+            - name: ark-data
+              mountPath: /ark
+          readinessProbe:
+            tcpSocket:
+              port: {{ .Values.service.ports.rcon.port }}
+            initialDelaySeconds: 60
+            timeoutSeconds: 5
+          livenessProbe:
+            tcpSocket:
+              port: {{ .Values.service.ports.rcon.port }}
+            initialDelaySeconds: 120
+            timeoutSeconds: 5
+      volumes:
+        - name: ark-data
+          hostPath:
+            path: {{ .Values.persistence.hostPath }}
+            type: DirectoryOrCreate
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ark-server
+spec:
+  type: {{ .Values.service.type }}
+  selector:
+    app: ark
+  ports:
+    - name: game
+      protocol: {{ .Values.service.ports.game.protocol }}
+      port: {{ .Values.service.ports.game.port }}
+      targetPort: {{ .Values.service.ports.game.port }}
+    - name: rcon
+      protocol: {{ .Values.service.ports.rcon.protocol }}
+      port: {{ .Values.service.ports.rcon.port }}
+      targetPort: {{ .Values.service.ports.rcon.port }}
+    - name: query
+      protocol: {{ .Values.service.ports.query.protocol }}
+      port: {{ .Values.service.ports.query.port }}
+      targetPort: {{ .Values.service.ports.query.port }}

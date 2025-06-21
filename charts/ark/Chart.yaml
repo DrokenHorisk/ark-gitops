@@ -1,5 +1,4 @@
 apiVersion: v2
-name: ark-server
+name: ark
 description: ARK: Survival Ascended server
 version: 0.1.0
-appVersion: "latest"
