@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: ark-config
+data:
+  SESSION_NAME: "{{ .Values.config.SESSION_NAME }}"
+  ASA_PORT: "{{ .Values.service.port }}"
+  RCON_PORT: "{{ .Values.service.rconPort }}"

@@ -1,5 +1,0 @@
-# charts/ark/templates/namespace.yaml
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: ark-server
