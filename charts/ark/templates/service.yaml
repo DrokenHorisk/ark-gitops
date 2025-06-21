@@ -1,15 +1,21 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ark-service
+  name: ark-server
 spec:
   type: {{ .Values.service.type }}
   selector:
-    app.kubernetes.io/name: ark-server
+    app: ark
   ports:
-    - port: {{ .Values.service.port }}
-      protocol: UDP
-      targetPort: {{ .Values.service.port }}
-    - port: {{ .Values.service.rconPort }}
-      protocol: TCP
-      targetPort: {{ .Values.service.rconPort }}
+    - name: game
+      protocol: {{ .Values.service.ports.game.protocol }}
+      port: {{ .Values.service.ports.game.port }}
+      targetPort: {{ .Values.service.ports.game.port }}
+    - name: rcon
+      protocol: {{ .Values.service.ports.rcon.protocol }}
+      port: {{ .Values.service.ports.rcon.port }}
+      targetPort: {{ .Values.service.ports.rcon.port }}
+    - name: query
+      protocol: {{ .Values.service.ports.query.protocol }}
+      port: {{ .Values.service.ports.query.port }}
+      targetPort: {{ .Values.service.ports.query.port }}
