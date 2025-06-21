@@ -23,7 +23,8 @@ spec:
               Xvfb :0 &
               export DISPLAY=:0
               wineboot
-              wine /usr/games/ark/ShooterGame/Binaries/Win64/ShooterGameServer.exe
+              WINEDEBUG=+loaddll wine /usr/games/ark/ShooterGame/Binaries/Win64/ShooterGameServer.exe
+
 
           volumeMounts:
             - mountPath: /usr/games
