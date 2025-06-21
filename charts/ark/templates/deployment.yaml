@@ -2,6 +2,8 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: ark-server
+  labels:
+    app: ark
 spec:
   replicas: 1
   selector:
@@ -24,10 +26,10 @@ spec:
             - containerPort: {{ .Values.service.ports.query.port }}
               protocol: {{ .Values.service.ports.query.protocol }}
           env:
-          {{- range $k,$v := .Values.config.env }}
-            - name: "{{ $k }}"
-              value: "{{ $v }}"
-          {{- end }}
+            {{- range $key, $value := .Values.config.env }}
+            - name: "{{ $key }}"
+              value: "{{ $value }}"
+            {{- end }}
           volumeMounts:
             - name: ark-data
               mountPath: /ark
