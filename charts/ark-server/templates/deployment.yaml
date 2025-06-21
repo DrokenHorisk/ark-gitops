@@ -1,0 +1,52 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ark-server
+  labels:
+    app: ark
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ark
+  template:
+    metadata:
+      labels:
+        app: ark
+    spec:
+      containers:
+        - name: ark
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 7777
+            - containerPort: 27015
+            - containerPort: 27020
+          volumeMounts:
+            - mountPath: {{ .Values.persistence.mountPath }}
+              name: ark-data
+          env:
+            - name: SERVER_NAME
+              value: {{ .Values.env.SERVER_NAME | quote }}
+            - name: MAP_NAME
+              value: {{ .Values.env.MAP_NAME | quote }}
+            - name: MAX_PLAYERS
+              value: {{ .Values.env.MAX_PLAYERS | quote }}
+            - name: ADMIN_PASSWORD
+              value: {{ .Values.env.ADMIN_PASSWORD | quote }}
+          livenessProbe:
+            exec:
+              command:
+                - pgrep
+                - ShooterGameServer
+            initialDelaySeconds: 60
+            periodSeconds: 30
+          readinessProbe:
+            tcpSocket:
+              port: 7777
+            initialDelaySeconds: 30
+            periodSeconds: 15
+      volumes:
+        - name: ark-data
+          hostPath:
+            path: {{ .Values.persistence.hostPath }}
