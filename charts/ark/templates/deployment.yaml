@@ -29,7 +29,9 @@ spec:
             {{- range $key, $value := .Values.config.env }}
             - name: "{{ $key }}"
               value: "{{ $value }}"
-            {{- end }}
+              {{- end }}
+            - name: DISPLAY
+              value: ""
           volumeMounts:
             - name: ark-data
               mountPath: /ark
