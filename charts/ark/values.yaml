@@ -32,3 +32,4 @@ config:
     RCON_PORT: "50002"
     MAX_PLAYERS: "70"
     CLUSTER_ID: "cluster"
+    DISPLAY: ""
