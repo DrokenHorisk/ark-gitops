@@ -1,16 +1,19 @@
 #!/bin/bash
 set -e
 
-# Lancer serveur X virtuel
+echo ">> Lancement Xvfb..."
 Xvfb :0 &
-
-# Attendre un peu que Xvfb soit prêt
 sleep 2
-
 export DISPLAY=:0
 
-# Optionnel : mise à jour ARK
-/steamcmd/steamcmd.sh +login anonymous +force_install_dir /usr/games/ark +app_update 2430930 validate +quit
-export WINEDEBUG=+loaddll
-# Lancer le serveur
-wine /usr/games/ark/ShooterGame/Binaries/Win64/ShooterGameServer.exe TheIsland?SessionName="ARK NAS"?MaxPlayers=10?listen -server -log
+echo ">> Initialisation de Wine..."
+wineboot || { echo "wineboot a échoué"; exit 1; }
+
+echo ">> Lancement du serveur ARK..."
+wine /usr/games/ark/ShooterGame/Binaries/Win64/ShooterGameServer.exe \
+  TheIsland?SessionName="ARK NAS"?MaxPlayers=10?listen -server -log || {
+    echo "Le serveur ARK a échoué à se lancer"
+    exit 2
+}
+
+echo ">> Le serveur s'est lancé correctement."
