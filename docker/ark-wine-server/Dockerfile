@@ -1,6 +1,6 @@
 FROM scottyhardy/docker-wine:latest
 
-# Install dependencies (Wine + Winetricks + SteamCMD)
+# Install dependencies
 RUN dpkg --add-architecture i386 && \
     apt-get update && \
     apt-get install -y \
@@ -17,11 +17,15 @@ RUN dpkg --add-architecture i386 && \
         libxext-dev \
         xvfb
 
-# Preconfigure Wine and install VC++ + DirectX
+# Set Wine environment variables
 ENV WINEPREFIX=/root/.wine
 ENV WINEARCH=win64
-RUN wineboot --init && \
-    winetricks -q vcrun2015 d3dx9
+ENV XDG_RUNTIME_DIR=/tmp/runtime-root
+
+# Create runtime directory for Wine and initialize with xvfb
+RUN mkdir -p $XDG_RUNTIME_DIR && chmod 700 $XDG_RUNTIME_DIR && \
+    xvfb-run wineboot --init && \
+    xvfb-run winetricks -q vcrun2015 d3dx9
 
 # Install SteamCMD
 RUN mkdir -p /steamcmd && \
