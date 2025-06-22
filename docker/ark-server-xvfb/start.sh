@@ -32,4 +32,8 @@ fi
 # Lancement du serveur (à adapter selon ton besoin)
 echo ">>> Lancement du serveur ARK ASA..."
 cd /home/wineuser/ark
-wine ArkAscendedServer.exe
+xvfb-run wine ArkAscendedServer.exe || true
+
+echo ">>> Le serveur s'est arrêté. Mise en pause pour debug..."
+tail -f /dev/null
+

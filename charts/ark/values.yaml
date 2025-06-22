@@ -39,3 +39,5 @@ config:
     MAX_PLAYERS: "70"
     CLUSTER_ID: "cluster"
     DISPLAY: ""
+    STEAM_USER: "devilben33"
+    STEAM_PASS: "18mfe901036."
