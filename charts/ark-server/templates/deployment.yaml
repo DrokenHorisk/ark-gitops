@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ark-server
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ark-server
+  template:
+    metadata:
+      labels:
+        app: ark-server
+    spec:
+      containers:
+        - name: ark
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: {{ .Values.ports.asa }}
+            - containerPort: {{ .Values.ports.rcon }}
+          env:
+            - name: ASA_PORT
+              value: "{{ .Values.ports.asa }}"
+            - name: RCON_PORT
+              value: "{{ .Values.ports.rcon }}"
+          volumeMounts:
+            - name: ark-data
+              mountPath: /home/steam/ARK
+          resources:
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+      volumes:
+        - name: ark-data
+          hostPath:
+            path: {{ .Values.persistence.path }}
+            type: DirectoryOrCreate
