@@ -1,52 +1,34 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ark-server
-  labels:
-    app: ark
+  name: ark-asa
 spec:
-  replicas: 1
+  replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels:
-      app: ark
+      app: ark-asa
   template:
     metadata:
       labels:
-        app: ark
+        app: ark-asa
     spec:
       containers:
-        - name: ark
+        - name: ark-asa
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
           ports:
-            - containerPort: {{ .Values.service.ports.game.port }}
-              protocol: {{ .Values.service.ports.game.protocol }}
-            - containerPort: {{ .Values.service.ports.rcon.port }}
-              protocol: {{ .Values.service.ports.rcon.protocol }}
-            - containerPort: {{ .Values.service.ports.query.port }}
-              protocol: {{ .Values.service.ports.query.protocol }}
+            - containerPort: 50001
+            - containerPort: 50002
+            - containerPort: 50003
           env:
             {{- range $key, $value := .Values.config.env }}
-            - name: "{{ $key }}"
+            - name: {{ $key }}
               value: "{{ $value }}"
               {{- end }}
-            - name: DISPLAY
-              value: ""
           volumeMounts:
-            - name: ark-data
-              mountPath: /ark
-          readinessProbe:
-            tcpSocket:
-              port: {{ .Values.service.ports.rcon.port }}
-            initialDelaySeconds: 60
-            timeoutSeconds: 5
-          livenessProbe:
-            tcpSocket:
-              port: {{ .Values.service.ports.rcon.port }}
-            initialDelaySeconds: 120
-            timeoutSeconds: 5
+            - mountPath: /mnt/ark_data
+              name: ark-data
       volumes:
         - name: ark-data
           hostPath:
             path: {{ .Values.persistence.hostPath }}
-            type: DirectoryOrCreate

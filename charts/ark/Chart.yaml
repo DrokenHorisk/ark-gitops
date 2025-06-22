@@ -1,6 +1,5 @@
 apiVersion: v2
-name: ark
-description: ARK Survival Ascended server
-type: application
+name: ark-server
+description: Helm chart to deploy ARK ASA Server with Wine
 version: 0.1.0
-appVersion: "1.0"
+appVersion: "latest"

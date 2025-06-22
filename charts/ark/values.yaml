@@ -1,19 +1,25 @@
+replicaCount: 1
+
 image:
-  repository: acekorneya/asa_server
+  repository: drokenhorisk/ark-server-xvfb
   tag: latest
+  pullPolicy: IfNotPresent
 
 service:
-  type: LoadBalancer
+  type: NodePort
   ports:
-    game:
+    - name: port1
       port: 50001
-      protocol: UDP
-    rcon:
-      port: 50003
-      protocol: TCP
-    query:
+      targetPort: 50001
+    - name: port2
       port: 50002
-      protocol: UDP
+      targetPort: 50002
+    - name: port3
+      port: 50003
+      targetPort: 50003
+
+resources: {}
+
 
 persistence:
   enabled: true
