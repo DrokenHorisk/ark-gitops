@@ -10,13 +10,12 @@ wineboot --init || true
 echo ">>> Configuration du bureau virtuel..."
 wine reg add "HKCU\\Software\\Wine\\Explorer\\Desktops" /v Default /d 1024x768 /f || true
 
-echo ">>> Démarrage de Xvfb..."
+echo ">>> Lancement de Xvfb..."
 Xvfb :0 -screen 0 1024x768x16 &
-
 export DISPLAY=:0
+sleep 5
 
 echo ">>> Installation ou mise à jour du serveur ARK ASA avec SteamCMD..."
-
 STEAM_USER="${STEAM_USER:-anonymous}"
 STEAM_PASS="${STEAM_PASS:-}"
 STEAM_AUTH="${STEAM_AUTH:-}"
@@ -35,7 +34,7 @@ fi
 
 echo ">>> Lancement du serveur ARK ASA..."
 cd /home/wineuser/ark
-wine ArkAscendedServer.exe || echo ">>> Le serveur a crash. En attente pour debug..."
+wine ArkAscendedServer.exe || true
 
-# Garder le conteneur actif pour debug si crash
+echo ">>> Le conteneur reste actif pour debug si le serveur s'arrête."
 tail -f /dev/null
