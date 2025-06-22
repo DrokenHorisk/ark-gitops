@@ -1,5 +1,0 @@
-apiVersion: v2
-name: ark-server
-description: Helm chart to deploy ARK ASA Server with Wine
-version: 0.1.0
-appVersion: "latest"
