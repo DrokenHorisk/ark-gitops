@@ -1,7 +1,7 @@
 replicaCount: 1
 
 image:
-  repository: drokenhorisk/ark-server-xvfb
+  repository: droken/ark-server-xvfb
   tag: latest
   pullPolicy: IfNotPresent
 
