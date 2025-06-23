@@ -24,12 +24,12 @@ spec:
               value: "{{ .Values.ports.asa }}"
             - name: RCON_PORT
               value: "{{ .Values.ports.rcon }}"
-          command: ["/bin/bash"]
-          args:
-            - "-c"
-            - |
-              ./start.sh _WP?listen?Port={{ .Values.ports.asa }}?ServerAdminPassword=adminpass?{{ range .Values.extraArgs }}{{ . }}?{{ end }}
-
+            - name: SESSION_NAME
+              value: "MyArkServer"
+            - name: MAP
+              value: "_WP"
+            - name: SERVER_ARGS
+              value: "-MultiHome=0.0.0.0?ServerAdminPassword=adminpass"
           volumeMounts:
             - name: ark-data
               mountPath: /home/steam/ARK
