@@ -16,6 +16,8 @@ spec:
         - name: ark
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
+          command: ["/bin/bash"]
+          args: ["./start.sh"]
           ports:
             - containerPort: {{ .Values.ports.asa }}
             - containerPort: {{ .Values.ports.rcon }}
@@ -30,18 +32,9 @@ spec:
               value: "_WP"
             - name: SERVER_ARGS
               value: "-MultiHome=0.0.0.0?ServerAdminPassword=adminpass"
-          command: ["/bin/bash"]
-          args: ["./start.sh"]
           volumeMounts:
             - name: ark-data
               mountPath: /home/steam/ARK
-          resources:
-            requests:
-              cpu: {{ .Values.resources.requests.cpu }}
-              memory: {{ .Values.resources.requests.memory }}
-            limits:
-              cpu: {{ .Values.resources.limits.cpu }}
-              memory: {{ .Values.resources.limits.memory }}
       volumes:
         - name: ark-data
           hostPath:
