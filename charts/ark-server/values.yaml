@@ -5,6 +5,14 @@ image:
   tag: "2_1_latest"
   pullPolicy: IfNotPresent
 
+resources:
+  limits:
+    cpu: "4"       # max 4 vCPU
+    memory: "8Gi"  # max 8 Go RAM
+  requests:
+    cpu: "2"
+    memory: "4Gi"
+
 service:
   type: NodePort             # Type de Service (NodePort par défaut, peut être LoadBalancer)
   gameNodePort: 50001        # NodePort pour le port de jeu UDP (optionnel)

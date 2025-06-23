@@ -26,22 +26,50 @@ spec:
           - sh
           - -c
           - |
-            echo "⏳ Attente de /home/pok/arkserver/.steam (max 60s)..."
-            for i in $(seq 1 60); do
-              if [ -d "/home/pok/arkserver/.steam" ]; then
-                echo "✅ Dossier .steam trouvé !"
-                break
+            echo "🧼 Init: Vérification de l'état du serveur ARK"
+
+            if [ -f "/home/pok/arkserver/updating.flag" ]; then
+              echo "⚠️ updating.flag détecté."
+              echo "🔍 Vérification de la présence de steamcmd..."
+
+              if ps | grep -q "[s]teamcmd"; then
+                echo "🔄 steamcmd est actif. On attend qu'il termine..."
+
+                # Attente jusqu'à 10 minutes max
+                for i in $(seq 1 300); do
+                  sleep 2
+                  if ! ps | grep -q "[s]teamcmd"; then
+                    echo "✅ steamcmd a terminé."
+                    break
+                  fi
+                done
+
+                # Encore là ?
+                if ps | grep -q "[s]teamcmd"; then
+                  echo "❌ steamcmd est toujours actif après 10 minutes. On continue quand même..."
+                fi
+
+              else
+                echo "❗ steamcmd n'est PAS actif. Le fichier updating.flag est probablement bloqué."
+                echo "🧹 Suppression manuelle de updating.flag..."
+                rm -f /home/pok/arkserver/updating.flag
               fi
-              sleep 1
-            done
-            echo "🧹 Nettoyage des fichiers de lock Steam..."
-            find /home/pok/arkserver/.steam -type f -name "*.lock" -exec rm -f {} \;
-            echo "✅ Nettoyage terminé."
+
+            else
+              echo "✅ Aucun updating.flag détecté."
+            fi
+
+            echo "🧹 Nettoyage des fichiers .lock si existants..."
+            if [ -d "/home/pok/arkserver/.steam" ]; then
+              find /home/pok/arkserver/.steam -type f -name "*.lock" -exec rm -f {} \;
+              echo "✅ .lock supprimés."
+            fi
+
+            echo "✅ Init terminé."
         volumeMounts:
           - name: ark-data
             mountPath: /home/pok/arkserver
-
-
+            
       containers:
       - name: ark-server
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
