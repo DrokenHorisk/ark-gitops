@@ -1,0 +1,26 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "ark-server.fullname" . }}-config
+  labels:
+    app.kubernetes.io/name: {{ include "ark-server.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
+data:
+  SESSION_NAME: {{ .Values.serverConfig.sessionName | quote }}
+  MAP_NAME: {{ .Values.serverConfig.mapName | quote }}
+  ASA_PORT: "{{ .Values.serverConfig.gamePort }}"
+  RCON_PORT: "{{ .Values.serverConfig.rconPort }}"
+  MAX_PLAYERS: "{{ .Values.serverConfig.maxPlayers }}"
+  CLUSTER_ID: {{ .Values.serverConfig.clusterId | quote }}
+  MOD_IDS: {{ .Values.serverConfig.modIds | quote }}
+  PASSIVE_MODS: {{ .Values.serverConfig.passiveMods | quote }}
+{{- if .Values.serverConfig.customServerArgs }}
+  CUSTOM_SERVER_ARGS: {{ .Values.serverConfig.customServerArgs | quote }}
+{{- end }}
+  # Activer RCON pour le shutdown propre
+  RCON_ENABLED: "TRUE"
+  # Activer/désactiver BattleEye (anti-cheat)
+  BATTLEEYE: "TRUE"
+  # Mises à jour automatiques du serveur
+  UPDATE_SERVER: "TRUE"
+  CHECK_FOR_UPDATE_INTERVAL: "24"

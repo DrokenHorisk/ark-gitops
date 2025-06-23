@@ -1,42 +1,82 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: ark-server
+  name: {{ include "ark-server.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "ark-server.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: ark-server
+      app.kubernetes.io/name: {{ include "ark-server.name" . }}
+      app.kubernetes.io/instance: {{ .Release.Name }}
   template:
     metadata:
       labels:
-        app: ark-server
+        app.kubernetes.io/name: {{ include "ark-server.name" . }}
+        app.kubernetes.io/instance: {{ .Release.Name }}
+      # Vous pouvez ajouter des annotations ici, par ex. pour la collecte de logs Loki :
+      # annotations:
+      #   loki.grafana.com/enabled: "true"
     spec:
-      containers:
-        - name: ark
-          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
-          imagePullPolicy: {{ .Values.image.pullPolicy }}
-          command: ["/bin/bash"]
-          args: ["./start.sh"]
-          ports:
-            - containerPort: {{ .Values.ports.asa }}
-            - containerPort: {{ .Values.ports.rcon }}
-          env:
-            - name: ASA_PORT
-              value: "{{ .Values.ports.asa }}"
-            - name: RCON_PORT
-              value: "{{ .Values.ports.rcon }}"
-            - name: SESSION_NAME
-              value: "IceLauzDroken"
-            - name: MAP
-              value: "_WP"
-            - name: SERVER_ARGS
-              value: "-MultiHome=0.0.0.0?ServerAdminPassword=adminpass"
-          volumeMounts:
-            - name: ark-data
-              mountPath: /home/steam/ARK
-      volumes:
+      # Security context pour appliquer le bon GID sur les volumes
+      securityContext:
+        fsGroup: 7777
+      # Init container pour corriger les permissions du volume hostPath
+      initContainers:
+      - name: fix-permissions
+        image: busybox:latest
+        command: ["sh", "-c", "chown -R 7777:7777 /home/pok/arkserver"]
+        volumeMounts:
         - name: ark-data
-          hostPath:
-            path: {{ .Values.persistence.path }}
-            type: DirectoryOrCreate
+          mountPath: /home/pok/arkserver
+      containers:
+      - name: ark-server
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+        imagePullPolicy: {{ .Values.image.pullPolicy }}
+        ports:
+        - name: game
+          containerPort: {{ .Values.serverConfig.gamePort }}
+          protocol: UDP
+        - name: game-tcp
+          containerPort: {{ .Values.serverConfig.gamePort }}
+          protocol: TCP
+        - name: rcon
+          containerPort: {{ .Values.serverConfig.rconPort }}
+          protocol: TCP
+        envFrom:
+        - configMapRef:
+            name: {{ include "ark-server.fullname" . }}-config
+        - secretRef:
+            name: {{ include "ark-server.fullname" . }}-secret
+        volumeMounts:
+        - name: ark-data
+          mountPath: /home/pok/arkserver
+        # Probe de liveness : on tente de se connecter au port RCON TCP
+        livenessProbe:
+          tcpSocket:
+            port: {{ .Values.serverConfig.rconPort }}
+          initialDelaySeconds: 300
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 5
+        # Probe de readiness : on attend que le RCON réponde avant de marquer le pod Ready
+        readinessProbe:
+          tcpSocket:
+            port: {{ .Values.serverConfig.rconPort }}
+          initialDelaySeconds: 60
+          periodSeconds: 30
+          timeoutSeconds: 5
+          failureThreshold: 3
+      volumes:
+{{- if .Values.persistence.hostPath }}
+      - name: ark-data
+        hostPath:
+          path: {{ .Values.persistence.hostPath }}
+          type: DirectoryOrCreate
+{{- else }}
+      - name: ark-data
+        persistentVolumeClaim:
+          claimName: {{ include "ark-server.fullname" . }}-pvc
+{{- end }}

@@ -11,7 +11,7 @@ spec:
     path: charts/ark-server
   destination:
     server: https://kubernetes.default.svc
-    namespace: default
+    namespace: ark-server
   syncPolicy:
     automated:
       prune: true

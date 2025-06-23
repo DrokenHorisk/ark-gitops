@@ -1,20 +1,36 @@
+# valeurs par défaut pour le chart ark-server
+
 image:
   repository: acekorneya/asa_server
-  tag: latest
+  tag: "2_1_latest"
   pullPolicy: IfNotPresent
 
-ports:
-  asa: 50001
-  rcon: 50002
+service:
+  type: NodePort            # Type de Service (NodePort par défaut, peut être LoadBalancer)
+  gameNodePort: null        # NodePort pour le port de jeu UDP (optionnel)
+  rconNodePort: null        # NodePort pour le port RCON TCP (optionnel)
 
 persistence:
   enabled: true
-  path: /mnt/ark_data
+  hostPath: "/opt/arkserver"  # Chemin local pour stocker les données (par défaut sur le nœud)
+  size: 50Gi                  # Taille du volume si on utilise une PVC
+  storageClass: ""            # Classe de stockage si PVC (vide = défaut du cluster)
 
-resources:
-  requests:
-    cpu: "2"
-    memory: "6Gi"
-  limits:
-    cpu: "4"
-    memory: "12Gi"
+serverConfig:
+  sessionName: "ClubPing"    # SESSION_NAME: nom de la session/du serveur
+  mapName: "TheIsland"         # MAP_NAME: carte jouée (ex: "TheIsland")
+  serverPassword: ""           # SERVER_PASSWORD: mot de passe pour rejoindre (vide si pas de mot de passe)
+  serverAdminPassword: "MyPassword"  # SERVER_ADMIN_PASSWORD: mot de passe administrateur (RCON)
+  gamePort: 7777               # ASA_PORT: port du jeu
+  rconPort: 27020              # RCON_PORT: port du RCON (administration à distance)
+  maxPlayers: 70               # MAX_PLAYERS: nombre max de joueurs
+  clusterId: "cluster"         # CLUSTER_ID: identifiant de cluster pour les transferts
+  modIds: ""                   # MOD_IDS: liste d'IDs de mods séparés par des virgules (si applicable)
+  passiveMods: ""              # PASSIVE_MODS: mods "passifs" séparés par des virgules
+  customServerArgs: ""         # CUSTOM_SERVER_ARGS: arguments additionnels au lancement (ex: "-ForceAllowCaveFlyers")
+
+monitoring:
+  enabled: false
+  serviceMonitor:
+    interval: 15s
+    port: "metrics"

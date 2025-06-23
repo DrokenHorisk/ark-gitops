@@ -1,17 +1,32 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: ark-service
+  name: {{ include "ark-server.fullname" . }}
+  labels:
+    app.kubernetes.io/name: {{ include "ark-server.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
 spec:
-  type: LoadBalancer
+  type: {{ .Values.service.type }}
   selector:
-    app: ark-server
+    app.kubernetes.io/name: {{ include "ark-server.name" . }}
+    app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
-    - name: asa
-      protocol: TCP
-      port: 50001
-      targetPort: 50001
-    - name: rcon
-      protocol: TCP
-      port: 50002
-      targetPort: 50002
+  - name: game-udp
+    port: {{ .Values.serverConfig.gamePort }}
+    protocol: UDP
+    targetPort: game
+{{- if and (.Values.service.type == "NodePort") .Values.service.gameNodePort }}
+    nodePort: {{ .Values.service.gameNodePort }}
+{{- end }}
+  - name: game-tcp
+    port: {{ .Values.serverConfig.gamePort }}
+    protocol: TCP
+    targetPort: game-tcp
+    # Pas de nodePort explicite pour le TCP (assigné automatiquement si NodePort)
+  - name: rcon
+    port: {{ .Values.serverConfig.rconPort }}
+    protocol: TCP
+    targetPort: rcon
+{{- if and (.Values.service.type == "NodePort") .Values.service.rconNodePort }}
+    nodePort: {{ .Values.service.rconNodePort }}
+{{- end }}
