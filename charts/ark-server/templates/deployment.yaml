@@ -16,18 +16,26 @@ spec:
       labels:
         app.kubernetes.io/name: {{ include "ark-server.name" . }}
         app.kubernetes.io/instance: {{ .Release.Name }}
-      # Vous pouvez ajouter des annotations ici, par ex. pour la collecte de logs Loki :
-      # annotations:
-      #   loki.grafana.com/enabled: "true"
     spec:
-      # Security context pour appliquer le bon GID sur les volumes
       securityContext:
         fsGroup: 7777
-      # Init container pour corriger les permissions du volume hostPath
       initContainers:
       - name: fix-permissions
         image: busybox:latest
         command: ["sh", "-c", "chown -R 7777:7777 /home/pok/arkserver"]
+        volumeMounts:
+        - name: ark-data
+          mountPath: /home/pok/arkserver
+      - name: clean-steam-lock
+        image: busybox:latest
+        command:
+          - sh
+          - -c
+          - |
+            echo "Cleaning SteamCMD locks..."
+            rm -f /home/pok/arkserver/.steam/update.lock
+            rm -rf /home/pok/arkserver/Steam/logs/*
+            echo "Locks cleaned."
         volumeMounts:
         - name: ark-data
           mountPath: /home/pok/arkserver
@@ -53,7 +61,6 @@ spec:
         volumeMounts:
         - name: ark-data
           mountPath: /home/pok/arkserver
-        # Probe de liveness : on tente de se connecter au port RCON TCP
         livenessProbe:
           tcpSocket:
             port: {{ .Values.serverConfig.rconPort }}
@@ -61,7 +68,6 @@ spec:
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 5
-        # Probe de readiness : on attend que le RCON réponde avant de marquer le pod Ready
         readinessProbe:
           tcpSocket:
             port: {{ .Values.serverConfig.rconPort }}
