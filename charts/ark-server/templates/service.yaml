@@ -19,4 +19,5 @@ spec:
       port: 50002
       targetPort: 50002
       nodePort: 50002
-
+extraArgs:
+  - "-MultiHome=0.0.0.0"

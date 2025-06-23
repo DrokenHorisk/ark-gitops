@@ -24,6 +24,12 @@ spec:
               value: "{{ .Values.ports.asa }}"
             - name: RCON_PORT
               value: "{{ .Values.ports.rcon }}"
+          command: ["/bin/bash"]
+          args:
+            - "-c"
+            - |
+              ./start.sh _WP?listen?Port={{ .Values.ports.asa }}?ServerAdminPassword=adminpass?{{ range .Values.extraArgs }}{{ . }}?{{ end }}
+
           volumeMounts:
             - name: ark-data
               mountPath: /home/steam/ARK
