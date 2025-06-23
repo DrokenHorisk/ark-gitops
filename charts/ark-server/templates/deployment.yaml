@@ -28,7 +28,7 @@ spec:
               value: "IceLauzDroken"
             - name: MAP
               value: "_WP"
-            - name: SERVER_ARGS
+            - name: ARK_SERVER_EXTRA_ARGS
               value: "-MultiHome=0.0.0.0?ServerAdminPassword=adminpass"
           volumeMounts:
             - name: ark-data
