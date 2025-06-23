@@ -19,23 +19,19 @@ spec:
           ports:
             - containerPort: {{ .Values.ports.asa }}
             - containerPort: {{ .Values.ports.rcon }}
+          env:
+            - name: ASA_PORT
+              value: "{{ .Values.ports.asa }}"
+            - name: RCON_PORT
+              value: "{{ .Values.ports.rcon }}"
+            - name: SESSION_NAME
+              value: "IceLauzDroken"
+            - name: MAP
+              value: "_WP"
+            - name: SERVER_ARGS
+              value: "-MultiHome=0.0.0.0?ServerAdminPassword=adminpass"
           command: ["/bin/bash"]
-          args:
-            - "-c"
-            - |
-              echo "🔹 1. Téléchargement du serveur ARK via SteamCMD"
-              /home/steam/steamcmd/steamcmd.sh +login anonymous +app_update 2430930 validate +quit
-
-              echo "⏳ 2. Attente de l'apparition du serveur ArkAscendedServer.exe..."
-              while [ ! -f /home/steam/ARK/ShooterGame/Binaries/Win64/ArkAscendedServer.exe ]; do
-                sleep 10
-              done
-
-              echo "✅ 3. Fichier détecté ! Lancement du serveur..."
-              cd /home/steam/ARK/ShooterGame/Binaries/Win64
-
-              wine ArkAscendedServer.exe "_WP?listen?SessionName=IceLauzDroken?Port=50001?MultiHome=0.0.0.0?ServerAdminPassword=adminpass?MaxPlayers=10" \
-              -WinLiveMaxPlayers= -clusterid= -servergamelog -servergamelogincludetribelogs -ServerRCONOutputTribeLogs -NotifyAdminCommandsInChat -nosteamclient
+          args: ["./start.sh"]
           volumeMounts:
             - name: ark-data
               mountPath: /home/steam/ARK
