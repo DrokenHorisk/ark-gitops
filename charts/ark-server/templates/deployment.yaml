@@ -25,7 +25,7 @@ spec:
             - name: RCON_PORT
               value: "{{ .Values.ports.rcon }}"
             - name: SESSION_NAME
-              value: "MyArkServer"
+              value: "IceLauzDroken"
             - name: MAP
               value: "_WP"
             - name: SERVER_ARGS
