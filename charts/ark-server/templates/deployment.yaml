@@ -27,6 +27,8 @@ spec:
           - -c
           - |
             echo "🧹 Nettoyage des fichiers de lock Steam..."
+            rm -f /home/pok/arkserver/.steam/update.lock /home/pok/arkserver/.steam/steam.pid
+            rm -f /home/pok/arkserver/.steam/steamapps/appmanifest_2430930.acf
             rm -f /home/pok/arkserver/.steam/update.lock
             rm -f /home/pok/arkserver/.steam/steam.pid
             rm -f /home/pok/arkserver/.steam/steam_appid.txt
