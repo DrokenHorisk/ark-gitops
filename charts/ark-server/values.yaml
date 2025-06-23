@@ -6,9 +6,9 @@ image:
   pullPolicy: IfNotPresent
 
 service:
-  type: NodePort            # Type de Service (NodePort par défaut, peut être LoadBalancer)
-  gameNodePort: null        # NodePort pour le port de jeu UDP (optionnel)
-  rconNodePort: null        # NodePort pour le port RCON TCP (optionnel)
+  type: NodePort             # Type de Service (NodePort par défaut, peut être LoadBalancer)
+  gameNodePort: 50001        # NodePort pour le port de jeu UDP (optionnel)
+  rconNodePort: 50002        # NodePort pour le port RCON TCP (optionnel)
 
 persistence:
   enabled: true

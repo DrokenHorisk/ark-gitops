@@ -15,18 +15,17 @@ spec:
     port: {{ .Values.serverConfig.gamePort }}
     protocol: UDP
     targetPort: game
-{{- if and (.Values.service.type == "NodePort") .Values.service.gameNodePort }}
+    {{- if and (eq .Values.service.type "NodePort") .Values.service.gameNodePort }}
     nodePort: {{ .Values.service.gameNodePort }}
-{{- end }}
+    {{- end }}
   - name: game-tcp
     port: {{ .Values.serverConfig.gamePort }}
     protocol: TCP
     targetPort: game-tcp
-    # Pas de nodePort explicite pour le TCP (assigné automatiquement si NodePort)
   - name: rcon
     port: {{ .Values.serverConfig.rconPort }}
     protocol: TCP
     targetPort: rcon
-{{- if and (.Values.service.type == "NodePort") .Values.service.rconNodePort }}
+    {{- if and (eq .Values.service.type "NodePort") .Values.service.rconNodePort }}
     nodePort: {{ .Values.service.rconNodePort }}
-{{- end }}
+    {{- end }}
