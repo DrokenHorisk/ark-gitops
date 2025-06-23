@@ -26,22 +26,21 @@ spec:
           - sh
           - -c
           - |
-            echo "🔧 [InitContainer] Début du fix des permissions et nettoyage des fichiers lock..."
-            echo "📁 Contenu initial de /home/pok/arkserver:"
-            ls -al /home/pok/arkserver || echo "🚫 Dossier vide ou introuvable"
-
-            echo "🧹 Suppression des fichiers lock..."
-            rm -v -f /home/pok/arkserver/.steam/update.lock
-            rm -v -f /home/pok/arkserver/.steam/steam.pid
-            rm -v -f /home/pok/arkserver/.steam/steamapps/appmanifest_2430930.acf
-
-            echo "🔐 Fix des permissions sur /home/pok/arkserver..."
-            chown -R 7777:7777 /home/pok/arkserver || echo "⚠️ Erreur lors du chown"
-
-            echo "✅ [InitContainer] Terminé."
+            echo "⏳ Attente de /home/pok/arkserver/.steam (max 60s)..."
+            for i in $(seq 1 60); do
+              if [ -d "/home/pok/arkserver/.steam" ]; then
+                echo "✅ Dossier .steam trouvé !"
+                break
+              fi
+              sleep 1
+            done
+            echo "🧹 Nettoyage des fichiers de lock Steam..."
+            find /home/pok/arkserver/.steam -type f -name "*.lock" -exec rm -f {} \;
+            echo "✅ Nettoyage terminé."
         volumeMounts:
           - name: ark-data
             mountPath: /home/pok/arkserver
+
 
       containers:
       - name: ark-server
