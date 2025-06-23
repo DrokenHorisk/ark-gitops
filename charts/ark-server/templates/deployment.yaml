@@ -22,20 +22,7 @@ spec:
       initContainers:
       - name: fix-permissions
         image: busybox:latest
-        command: ["sh", "-c", "chown -R 7777:7777 /home/pok/arkserver"]
-        volumeMounts:
-        - name: ark-data
-          mountPath: /home/pok/arkserver
-      - name: clean-steam-lock
-        image: busybox:latest
-        command:
-          - sh
-          - -c
-          - |
-            echo "Cleaning SteamCMD locks..."
-            rm -f /home/pok/arkserver/.steam/update.lock
-            rm -rf /home/pok/arkserver/Steam/logs/*
-            echo "Locks cleaned."
+        command: ["sh", "-c", "rm -f /home/pok/arkserver/.steam/update.lock && chown -R 7777:7777 /home/pok/arkserver"]
         volumeMounts:
         - name: ark-data
           mountPath: /home/pok/arkserver
@@ -64,14 +51,14 @@ spec:
         livenessProbe:
           tcpSocket:
             port: {{ .Values.serverConfig.rconPort }}
-          initialDelaySeconds: 800
+          initialDelaySeconds: 1200
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 5
         readinessProbe:
           tcpSocket:
             port: {{ .Values.serverConfig.rconPort }}
-          initialDelaySeconds: 800
+          initialDelaySeconds: 1200
           periodSeconds: 30
           timeoutSeconds: 5
           failureThreshold: 3
