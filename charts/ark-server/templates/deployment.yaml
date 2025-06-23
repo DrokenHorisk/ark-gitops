@@ -22,10 +22,20 @@ spec:
       initContainers:
       - name: fix-permissions
         image: busybox:latest
-        command: ["sh", "-c", "rm -f /home/pok/arkserver/.steam/update.lock && chown -R 7777:7777 /home/pok/arkserver"]
+        command:
+          - sh
+          - -c
+          - |
+            echo "🧹 Nettoyage des fichiers de lock Steam..."
+            rm -f /home/pok/arkserver/.steam/update.lock
+            rm -f /home/pok/arkserver/.steam/steam.pid
+            rm -f /home/pok/arkserver/.steam/steam_appid.txt
+            find /home/pok/arkserver/.steam -name "*.acf" -exec rm -f {} \;
+            chown -R 7777:7777 /home/pok/arkserver
         volumeMounts:
-        - name: ark-data
-          mountPath: /home/pok/arkserver
+          - name: ark-data
+            mountPath: /home/pok/arkserver
+
       containers:
       - name: ark-server
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
