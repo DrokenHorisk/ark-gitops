@@ -10,13 +10,11 @@ spec:
   type: NodePort
   selector:
     app: ark-server
-  # ports:
-  #   - name: asa
-  #     port: 50001
-  #     targetPort: 50001
-  #     nodePort: 50001
-  #   - name: rcon
-  #     port: 50002
-  #     targetPort: 50002
-  #     nodePort: 50002
+  ports:
+    - name: asa
+      port: 50001
+      targetPort: 50001
+    - name: rcon
+      port: 50002
+      targetPort: 50002
 
