@@ -22,9 +22,14 @@ spec:
           command: ["/bin/bash"]
           args:
             - "-c"
-            - >
-              cd /home/steam/ARK/ShooterGame/Binaries/Win64 &&
-              wine ArkAscendedServer.exe "_WP?listen?SessionName=IceLauzDroken?Port=50001?MultiHome=0.0.0.0?ServerAdminPassword=adminpass?MaxPlayers=10"
+            - |
+              echo "⏳ Attente de l'installation complète du serveur ARK..."
+              while [ ! -f /home/steam/ARK/ShooterGame/Binaries/Win64/ArkAscendedServer.exe ]; do
+                sleep 10
+              done
+              echo "✅ Serveur trouvé, lancement..."
+              cd /home/steam/ARK/ShooterGame/Binaries/Win64
+              wine ArkAscendedServer.exe "_WP?listen?SessionName=IceLauzDroken?Port=50001?MultiHome=0.0.0.0?ServerAdminPassword=adminpass?MaxPlayers=10" \
               -WinLiveMaxPlayers= -clusterid= -servergamelog -servergamelogincludetribelogs -ServerRCONOutputTribeLogs -NotifyAdminCommandsInChat -nosteamclient
           volumeMounts:
             - name: ark-data
