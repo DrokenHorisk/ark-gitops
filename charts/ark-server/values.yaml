@@ -36,7 +36,9 @@ serverConfig:
   modIds: ""                   # MOD_IDS: liste d'IDs de mods séparés par des virgules (si applicable)
   passiveMods: ""              # PASSIVE_MODS: mods "passifs" séparés par des virgules
   customServerArgs: ""         # CUSTOM_SERVER_ARGS: arguments additionnels au lancement (ex: "-ForceAllowCaveFlyers")
-  
+  extraArgs:
+  - "Astraeos_WP?listen?SessionName=ClubPing?RCONEnabled=True?RCONPort=27020?ServerAdminPassword=MyPassword -Port=7777 -WinLiveMaxPlayers=70 -NoBattlEye -servergamelog"
+
 monitoring:
   enabled: false
   serviceMonitor:
