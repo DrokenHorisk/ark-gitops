@@ -11,17 +11,16 @@ spec:
     app.kubernetes.io/name: {{ include "ark-server.name" . }}
     app.kubernetes.io/instance: {{ .Release.Name }}
   ports:
-  - name: game-udp
+  # Game port (UDP only)
+  - name: game
     port: {{ .Values.serverConfig.gamePort }}
     protocol: UDP
     targetPort: game
     {{- if and (eq .Values.service.type "NodePort") .Values.service.gameNodePort }}
     nodePort: {{ .Values.service.gameNodePort }}
     {{- end }}
-  - name: game-tcp
-    port: {{ .Values.serverConfig.gamePort }}
-    protocol: TCP
-    targetPort: game-tcp
+
+  # RCON (TCP)
   - name: rcon
     port: {{ .Values.serverConfig.rconPort }}
     protocol: TCP
