@@ -26,7 +26,7 @@ persistence:
 
 serverConfig:
   sessionName: "ClubPing"    # SESSION_NAME: nom de la session/du serveur
-  mapName: "TheIsland"         # MAP_NAME: carte jouée (ex: "TheIsland")
+  mapName: "Astraeos"         # MAP_NAME: carte jouée (ex: "TheIsland")
   serverPassword: ""           # SERVER_PASSWORD: mot de passe pour rejoindre (vide si pas de mot de passe)
   serverAdminPassword: "MyPassword"  # SERVER_ADMIN_PASSWORD: mot de passe administrateur (RCON)
   gamePort: 7777               # ASA_PORT: port du jeu
@@ -36,7 +36,7 @@ serverConfig:
   modIds: ""                   # MOD_IDS: liste d'IDs de mods séparés par des virgules (si applicable)
   passiveMods: ""              # PASSIVE_MODS: mods "passifs" séparés par des virgules
   customServerArgs: ""         # CUSTOM_SERVER_ARGS: arguments additionnels au lancement (ex: "-ForceAllowCaveFlyers")
-
+  
 monitoring:
   enabled: false
   serviceMonitor:

@@ -1,17 +1,17 @@
-{{- if and .Values.monitoring.enabled (.Values.monitoring.serviceMonitor.port) }}
-apiVersion: monitoring.coreos.com/v1
-kind: ServiceMonitor
-metadata:
-  name: {{ include "ark-server.fullname" . }}-monitor
-  labels:
-    app.kubernetes.io/name: {{ include "ark-server.name" . }}
-    app.kubernetes.io/instance: {{ .Release.Name }}
-spec:
-  selector:
-    matchLabels:
-      app.kubernetes.io/name: {{ include "ark-server.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
-  endpoints:
-    - port: {{ .Values.monitoring.serviceMonitor.port | quote }}
-      interval: {{ .Values.monitoring.serviceMonitor.interval | quote }}
-{{- end }}
+# {{- if and .Values.monitoring.enabled (.Values.monitoring.serviceMonitor.port) }}
+# apiVersion: monitoring.coreos.com/v1
+# kind: ServiceMonitor
+# metadata:
+#   name: {{ include "ark-server.fullname" . }}-monitor
+#   labels:
+#     app.kubernetes.io/name: {{ include "ark-server.name" . }}
+#     app.kubernetes.io/instance: {{ .Release.Name }}
+# spec:
+#   selector:
+#     matchLabels:
+#       app.kubernetes.io/name: {{ include "ark-server.name" . }}
+#       app.kubernetes.io/instance: {{ .Release.Name }}
+#   endpoints:
+#     - port: {{ .Values.monitoring.serviceMonitor.port | quote }}
+#       interval: {{ .Values.monitoring.serviceMonitor.interval | quote }}
+# {{- end }}
