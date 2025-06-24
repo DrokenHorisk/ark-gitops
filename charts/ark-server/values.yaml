@@ -14,31 +14,28 @@ resources:
     memory: "4Gi"
 
 service:
-  type: NodePort             # Type de Service (NodePort par défaut, peut être LoadBalancer)
-  gameNodePort: 50001        # NodePort pour le port de jeu UDP (optionnel)
-  rconNodePort: 50002        # NodePort pour le port RCON TCP (optionnel)
+  type: NodePort
+  gameNodePort: 50001        # Port UDP exposé pour le jeu
+  rconNodePort: 50002        # Port TCP exposé pour RCON
 
 persistence:
   enabled: true
-  hostPath: "/opt/arkserver"  # Chemin local pour stocker les données (par défaut sur le nœud)
-  size: 50Gi                  # Taille du volume si on utilise une PVC
-  storageClass: ""            # Classe de stockage si PVC (vide = défaut du cluster)
+  hostPath: "/opt/arkserver"
+  size: 50Gi
+  storageClass: ""
 
 serverConfig:
-  sessionName: "ClubPing"    # SESSION_NAME: nom de la session/du serveur
-  mapName: "Astraeos"         # MAP_NAME: carte jouée (ex: "TheIsland")
-  serverPassword: ""           # SERVER_PASSWORD: mot de passe pour rejoindre (vide si pas de mot de passe)
-  serverAdminPassword: "MyPassword"  # SERVER_ADMIN_PASSWORD: mot de passe administrateur (RCON)
-  gamePort: 7777               # ASA_PORT: port du jeu
-  rconPort: 27020              # RCON_PORT: port du RCON (administration à distance)
-  maxPlayers: 70               # MAX_PLAYERS: nombre max de joueurs
-  clusterId: "cluster"         # CLUSTER_ID: identifiant de cluster pour les transferts
-  modIds: ""                   # MOD_IDS: liste d'IDs de mods séparés par des virgules (si applicable)
-  passiveMods: ""              # PASSIVE_MODS: mods "passifs" séparés par des virgules
-  customServerArgs: ""         # CUSTOM_SERVER_ARGS: arguments additionnels au lancement (ex: "-ForceAllowCaveFlyers")
-  extraArgs:
-  - Astraeos_WP?listen?SessionName="ClubPing"?RCONEnabled=True?RCONPort=27020?ServerAdminPassword=MyPassword?MultiHome=88.184.158.243?bRawSockets -Port=7777 -WinLiveMaxPlayers=70 -clusterid=cluster -servergamelog ...
-
+  sessionName: "ClubPing"
+  mapName: "Astraeos"
+  serverPassword: ""
+  serverAdminPassword: "MyPassword"
+  gamePort: 7777
+  rconPort: 27020
+  maxPlayers: 70
+  clusterId: "cluster"
+  modIds: ""
+  passiveMods: ""
+  customServerArgs: "-MultiHome=88.184.158.243 -bRawSockets"
 
 monitoring:
   enabled: false
