@@ -1,3 +1,5 @@
+# valeurs par défaut pour le chart ark-server
+
 image:
   repository: acekorneya/asa_server
   tag: "2_1_latest"
@@ -5,16 +7,16 @@ image:
 
 resources:
   limits:
-    cpu: "4"
-    memory: "8Gi"
+    cpu: "4"       # max 4 vCPU
+    memory: "8Gi"  # max 8 Go RAM
   requests:
     cpu: "2"
     memory: "4Gi"
 
 service:
-  type: LoadBalancer
-  gamePort: 7777
-  rconPort: 27020
+  type: NodePort
+  gameNodePort: 50001        # Port UDP exposé pour le jeu
+  rconNodePort: 50002        # Port TCP exposé pour RCON
 
 persistence:
   enabled: true
@@ -33,7 +35,10 @@ serverConfig:
   clusterId: "cluster"
   modIds: ""
   passiveMods: ""
-  customServerArgs: "-MultiHome=192.168.0.240 -bRawSockets"
+  customServerArgs: "-MultiHome=88.184.158.243 -bRawSockets"
 
 monitoring:
   enabled: false
+  serviceMonitor:
+    interval: 15s
+    port: "metrics"
