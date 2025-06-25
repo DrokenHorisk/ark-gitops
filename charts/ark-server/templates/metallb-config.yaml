@@ -1,17 +1,16 @@
 apiVersion: metallb.io/v1beta1
 kind: IPAddressPool
 metadata:
-  name: ark-pool
+  name: ark-ip-pool
   namespace: metallb-system
 spec:
   addresses:
-  - 88.184.158.243/32  # ← IP publique fixe (celle de ton NUC)
+    - 88.184.158.243/32  # ← Ton IP publique
+
 ---
 apiVersion: metallb.io/v1beta1
 kind: L2Advertisement
 metadata:
-  name: ark-adv
+  name: ark-l2
   namespace: metallb-system
-spec:
-  ipAddressPools:
-  - ark-pool
+spec: {}
