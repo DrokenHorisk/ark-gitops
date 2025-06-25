@@ -1,4 +1,4 @@
-# valeurs par défaut pour le chart ark-server
+# valeurs pour le chart ark-server
 
 image:
   repository: acekorneya/asa_server
@@ -7,16 +7,16 @@ image:
 
 resources:
   limits:
-    cpu: "4"       # max 4 vCPU
-    memory: "8Gi"  # max 8 Go RAM
+    cpu: "4"
+    memory: "8Gi"
   requests:
     cpu: "2"
     memory: "4Gi"
 
 service:
-  type: NodePort
-  gameNodePort: 50001        # Port UDP exposé pour le jeu
-  rconNodePort: 50002        # Port TCP exposé pour RCON
+  type: LoadBalancer           # ← METALLB ici
+  gameNodePort: null           # ← pas de NodePort
+  rconNodePort: null
 
 persistence:
   enabled: true
@@ -36,6 +36,7 @@ serverConfig:
   modIds: ""
   passiveMods: ""
   customServerArgs: "-MultiHome=88.184.158.243 -bRawSockets"
+  extraArgs: []
 
 monitoring:
   enabled: false
