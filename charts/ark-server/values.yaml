@@ -13,18 +13,23 @@ server:
 
 service:
   type: NodePort
-  gamePort:
-    port: 7777
-    nodePort: 50001
-    protocol: UDP
-  gamePortTCP:
-    port: 7777
-    nodePort: 50003
-    protocol: TCP
-  rcon:
-    port: 27020
-    nodePort: 50002
-    protocol: TCP
+  ports:
+    gameUdp:
+      port: 7777
+      targetPort: game
+      protocol: UDP
+      nodePort: 50001
+    gameTcp:
+      port: 7777
+      targetPort: 7777
+      protocol: TCP
+      nodePort: 50001
+    rcon:
+      port: 27020
+      targetPort: 27020
+      protocol: TCP
+      nodePort: 50002
+
 
 resources:
   requests:

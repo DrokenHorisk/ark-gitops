@@ -22,9 +22,10 @@ spec:
       protocol: TCP
       port: 7777
       targetPort: 7777
-      nodePort: 50003
+      nodePort: 50001
     - name: rcon
       protocol: TCP
       port: 27020
       targetPort: 27020
       nodePort: 50002
+
