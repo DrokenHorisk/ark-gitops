@@ -1,3 +1,4 @@
+# ✅ templates/service.yaml pour Helm
 apiVersion: v1
 kind: Service
 metadata:
@@ -21,6 +22,7 @@ spec:
       protocol: TCP
       port: 7777
       targetPort: 7777
+      nodePort: 50003
     - name: rcon
       protocol: TCP
       port: 27020

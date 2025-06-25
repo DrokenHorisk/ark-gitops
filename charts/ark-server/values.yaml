@@ -1,44 +1,35 @@
-# valeurs par défaut pour le chart ark-server
-
-image:
-  repository: acekorneya/asa_server
-  tag: "2_1_latest"
-  pullPolicy: IfNotPresent
-
-resources:
-  limits:
-    cpu: "4"       # max 4 vCPU
-    memory: "8Gi"  # max 8 Go RAM
-  requests:
-    cpu: "2"
-    memory: "4Gi"
+# ✅ values.yaml minimal (via Helm Chart)
+server:
+  name: ark-server
+  map: Astraeos_WP
+  sessionName: "ClubPing"
+  serverPassword: ""
+  serverAdminPassword: "MyPassword"
+  customServerArgs: >-
+    -Port=7777 -WinLiveMaxPlayers=70 -clusterid=cluster -servergamelog -servergamelogincludetribelogs -ServerRCONOutputTribeLogs -MultiHome=88.184.158.243 -bRawSockets -UseBattlEye
+  rcon:
+    enabled: true
+    port: 27020
 
 service:
   type: NodePort
-  gameNodePort: 50001        # Port UDP exposé pour le jeu
-  rconNodePort: 50002        # Port TCP exposé pour RCON
+  gamePort:
+    port: 7777
+    nodePort: 50001
+    protocol: UDP
+  gamePortTCP:
+    port: 7777
+    nodePort: 50003
+    protocol: TCP
+  rcon:
+    port: 27020
+    nodePort: 50002
+    protocol: TCP
 
-persistence:
-  enabled: true
-  hostPath: "/opt/arkserver"
-  size: 50Gi
-  storageClass: ""
-
-serverConfig:
-  sessionName: "ClubPing"
-  mapName: "Astraeos"
-  serverPassword: ""
-  serverAdminPassword: "MyPassword"
-  gamePort: 7777
-  rconPort: 27020
-  maxPlayers: 70
-  clusterId: "cluster"
-  modIds: ""
-  passiveMods: ""
-  customServerArgs: "-MultiHome=88.184.158.243 -bRawSockets"
-
-monitoring:
-  enabled: false
-  serviceMonitor:
-    interval: 15s
-    port: "metrics"
+resources:
+  requests:
+    cpu: 2
+    memory: 4Gi
+  limits:
+    cpu: 4
+    memory: 8Gi
