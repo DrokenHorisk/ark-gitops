@@ -10,6 +10,8 @@ server:
   rcon:
     enabled: true
     port: 27020
+serverConfig:
+  serverAdminPassword: "MyPassword"  # remplace par ton vrai mot de passe
 
 service:
   type: NodePort
