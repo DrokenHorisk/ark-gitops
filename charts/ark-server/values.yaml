@@ -1,4 +1,10 @@
 # ✅ values.yaml minimal (via Helm Chart)
+
+image:
+  repository: drokenhorisk/ark-server-xvfb
+  tag: latest
+  pullPolicy: IfNotPresent
+
 server:
   name: ark-server
   map: Astraeos_WP
