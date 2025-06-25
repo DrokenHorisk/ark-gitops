@@ -1,51 +1,64 @@
-# ✅ values.yaml minimal (via Helm Chart)
+# ============================================
+# 🚀 ARK Server Helm Chart Values Configuration
+# ============================================
 
 image:
   repository: drokenhorisk/ark-server-xvfb
   tag: latest
   pullPolicy: IfNotPresent
 
-server:
-  name: ark-server
-  map: Astraeos_WP
-  sessionName: "ClubPing"
-  serverPassword: ""
-  serverAdminPassword: "MyPassword"
-  customServerArgs: >-
-    -Port=7777 -WinLiveMaxPlayers=70 -clusterid=cluster -servergamelog -servergamelogincludetribelogs -ServerRCONOutputTribeLogs -MultiHome=88.184.158.243 -bRawSockets -UseBattlEye
-  rcon:
-    enabled: true
-    port: 27020
 serverConfig:
-  serverAdminPassword: "MyPassword"  # remplace par ton vrai mot de passe
+  serverName: ClubPing
+  serverAdminPassword: MyPassword
+  gamePort: 7777
+  rconPort: 27020
+  maxPlayers: 70
+  map: Astraeos_WP
+  clusterId: cluster
+  multiHome: 88.184.158.243
+  useBattleEye: true
+  apiEnabled: false
 
 service:
   type: NodePort
   ports:
-    gameUdp:
+    gameUDP:
       port: 7777
-      targetPort: game
+      nodePort: 50001
       protocol: UDP
-      nodePort: 50001
-    gameTcp:
+    gameTCP:
       port: 7777
-      targetPort: 7777
       protocol: TCP
-      nodePort: 50001
     rcon:
       port: 27020
-      targetPort: 27020
-      protocol: TCP
       nodePort: 50002
+      protocol: TCP
 
+persistence:
+  enabled: true
+  hostPath: /mnt/ark_data
 
 resources:
-  requests:
-    cpu: 2
-    memory: 4Gi
   limits:
-    cpu: 4
-    memory: 8Gi
+    cpu: "2"
+    memory: "4Gi"
+  requests:
+    cpu: "1"
+    memory: "2Gi"
 
 monitoring:
   enabled: false
+
+livenessProbe:
+  enabled: true
+  initialDelaySeconds: 1200
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 5
+
+readinessProbe:
+  enabled: true
+  initialDelaySeconds: 1200
+  periodSeconds: 30
+  timeoutSeconds: 5
+  failureThreshold: 3
