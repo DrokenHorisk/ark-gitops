@@ -3,8 +3,8 @@
 # ============================================
 
 image:
-  repository: drokenhorisk/ark-server-xvfb
-  tag: latest
+  repository: acekorneya/asa_server
+  tag: "2_1_latest"
   pullPolicy: IfNotPresent
 
 serverConfig:
