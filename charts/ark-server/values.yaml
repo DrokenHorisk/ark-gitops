@@ -1,5 +1,3 @@
-# valeurs pour le chart ark-server
-
 image:
   repository: acekorneya/asa_server
   tag: "2_1_latest"
@@ -14,9 +12,9 @@ resources:
     memory: "4Gi"
 
 service:
-  type: LoadBalancer           # ← METALLB ici
-  gameNodePort: null           # ← pas de NodePort
-  rconNodePort: null
+  type: LoadBalancer
+  gamePort: 7777
+  rconPort: 27020
 
 persistence:
   enabled: true
@@ -35,11 +33,7 @@ serverConfig:
   clusterId: "cluster"
   modIds: ""
   passiveMods: ""
-  customServerArgs: "-MultiHome=88.184.158.243 -bRawSockets"
-  extraArgs: []
+  customServerArgs: "-MultiHome=192.168.0.240 -bRawSockets"
 
 monitoring:
   enabled: false
-  serviceMonitor:
-    interval: 15s
-    port: "metrics"
